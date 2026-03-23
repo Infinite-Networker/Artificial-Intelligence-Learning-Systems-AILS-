@@ -14,8 +14,7 @@ Welcome to the journey.
 
 <div align="center">
 
-<!-- AILS LOGO -->
-<img src="assets/ails_logo.png" alt="AILS Logo" width="220"/>
+<img src="https://github.com/Infinite-Networker/Artificial-Intelligence-Learning-System-AILS-/blob/e51d8ac355038c57c372981756d1f638ce870171/The%20Official%20Artificial%20Intelligence%20Learning%20System%20(AILS)%20Logo.png" alt="The Official Logo of the Artificial Intelligence Learning System" width="350"/>
 
 <h1>
   <span style="font-size:3em; letter-spacing:4px; font-weight:900;">AILS</span><br/>
