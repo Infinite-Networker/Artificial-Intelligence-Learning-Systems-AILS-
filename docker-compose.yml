@@ -1,0 +1,94 @@
+version: "3.9"
+
+# AILS — Artificial Intelligence Learning System
+# Docker Compose Configuration
+# Created by Cherry Computer Ltd.
+
+services:
+  # ── AILS API Service ────────────────────────────────────────────────────────
+  ails-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ails-api
+    ports:
+      - "8000:8000"
+    environment:
+      - AILS_DB_HOST=ails-mysql
+      - AILS_DB_PORT=3306
+      - AILS_DB_USER=ails_user
+      - AILS_DB_PASSWORD=${MYSQL_PASSWORD:-ails_secret}
+      - AILS_DB_NAME=AILS_data
+      - AILS_LOG_LEVEL=INFO
+    depends_on:
+      ails-mysql:
+        condition: service_healthy
+    networks:
+      - ails-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ── MySQL Database ──────────────────────────────────────────────────────────
+  ails-mysql:
+    image: mysql:8.0
+    container_name: ails-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root_secret}
+      MYSQL_DATABASE: AILS_data
+      MYSQL_USER: ails_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-ails_secret}
+    volumes:
+      - ails-mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - ails-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost",
+             "-u", "ails_user", "--password=${MYSQL_PASSWORD:-ails_secret}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── MongoDB (NoSQL) ─────────────────────────────────────────────────────────
+  ails-mongo:
+    image: mongo:6.0
+    container_name: ails-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ails_admin
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-mongo_secret}
+      MONGO_INITDB_DATABASE: AILS
+    volumes:
+      - ails-mongo-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - ails-network
+    restart: unless-stopped
+
+  # ── Redis Cache ─────────────────────────────────────────────────────────────
+  ails-redis:
+    image: redis:7-alpine
+    container_name: ails-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - ails-network
+    restart: unless-stopped
+
+# ── Volumes ──────────────────────────────────────────────────────────────────
+volumes:
+  ails-mysql-data:
+    driver: local
+  ails-mongo-data:
+    driver: local
+
+# ── Networks ─────────────────────────────────────────────────────────────────
+networks:
+  ails-network:
+    driver: bridge

@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AILS — Artificial Intelligence Learning System</title>
+  <meta name="description" content="Artificial Intelligence Learning System (AILS) — A comprehensive open-source autonomous AI framework. Created by Cherry Computer Ltd." />
+  <meta property="og:title" content="AILS — Artificial Intelligence Learning System" />
+  <meta property="og:description" content="Open-source autonomous AI framework by Cherry Computer Ltd." />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── RESET & ROOT ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:     #0a0a0a;
+      --dark:      #111111;
+      --dark2:     #1a1a1a;
+      --dark3:     #222222;
+      --border:    #2a2a2a;
+      --muted:     #555555;
+      --light:     #cccccc;
+      --white:     #f5f5f5;
+      --accent:    #e0e0e0;
+      --red:       #DC143C;
+      --red-dim:   rgba(220,20,60,0.12);
+      --red-glow:  rgba(220,20,60,0.35);
+      --code-bg:   #161616;
+      --radius:    10px;
+      --font:      'Inter', sans-serif;
+      --mono:      'JetBrains Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--black);
+      color: var(--light);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--red); text-decoration: none; }
+    a:hover { color: var(--white); }
+
+    /* ── SCROLLBAR ────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--dark); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+
+    /* ── PARTICLES CANVAS ────────────────────────────────────────── */
+    #particles-canvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .nav-logo-ring {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 2px solid var(--red);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 10px var(--red-glow);
+    }
+    .nav-logo-ring span {
+      font-size: 0.7rem; font-weight: 900;
+      letter-spacing: 1px; color: var(--white);
+    }
+    .nav-title {
+      font-size: 0.9rem; font-weight: 700;
+      letter-spacing: 2px; color: var(--white);
+    }
+    .nav-links {
+      display: flex; gap: 1.8rem; list-style: none;
+    }
+    .nav-links a {
+      font-size: 0.82rem; font-weight: 500;
+      color: var(--muted); letter-spacing: 1px;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--red);
+      color: var(--white) !important;
+      padding: 6px 16px;
+      border-radius: 5px;
+      font-weight: 600 !important;
+      transition: background .2s, box-shadow .2s !important;
+    }
+    .nav-cta:hover {
+      background: #b01030 !important;
+      box-shadow: 0 0 16px var(--red-glow);
+    }
+
+    /* ── HERO ────────────────────────────────────────────────────── */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 2rem 60px;
+    }
+
+    .hero-logo {
+      position: relative;
+      width: 180px; height: 180px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-logo-ring {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      animation: spin-slow 20s linear infinite;
+    }
+    .hero-logo-ring::before {
+      content: '';
+      position: absolute; top: -3px; left: 50%;
+      transform: translateX(-50%);
+      width: 8px; height: 8px;
+      background: var(--red);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--red-glow);
+    }
+    .hero-logo-inner {
+      position: absolute; inset: 20px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%,
+        rgba(220,20,60,0.08) 0%, transparent 70%);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-logo-inner img {
+      width: 100%; height: 100%;
+      object-fit: contain; border-radius: 50%;
+      filter: brightness(0.9) contrast(1.1);
+    }
+    .hero-logo-fallback {
+      font-size: 3.5rem; font-weight: 900;
+      letter-spacing: 4px; color: var(--white);
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--muted); letter-spacing: 1.5px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px;
+      background: var(--red); border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 var(--red-glow); }
+      50%      { box-shadow: 0 0 0 6px rgba(220,20,60,0); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: -1px;
+      line-height: 1.05;
+      color: var(--white);
+      margin-bottom: 0.4rem;
+    }
+    .hero h1 .ails-letters {
+      display: inline-block;
+      background: linear-gradient(135deg, #fff 0%, #ccc 50%, var(--red) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      color: var(--muted);
+      letter-spacing: 3px;
+      font-weight: 400;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .hero-desc {
+      max-width: 660px;
+      font-size: 1.05rem;
+      color: #999;
+      margin: 0 auto 2.5rem;
+      line-height: 1.75;
+    }
+    .hero-desc strong { color: var(--white); }
+
+    .hero-cta-group {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+    .btn-primary {
+      background: var(--red);
+      color: var(--white);
+      padding: 13px 28px;
+      border-radius: var(--radius);
+      font-weight: 700; font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      border: 1px solid var(--red);
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover {
+      background: #b01030;
+      box-shadow: 0 0 24px var(--red-glow);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      padding: 13px 28px;
+      border-radius: var(--radius);
+      font-weight: 600; font-size: 0.9rem;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all .2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-outline:hover {
+      border-color: var(--white);
+      background: rgba(255,255,255,0.05);
+      transform: translateY(-2px);
+    }
+
+    /* Badges */
+    .hero-badges {
+      display: flex; gap: 0.6rem; flex-wrap: wrap;
+      justify-content: center;
+    }
+    .badge {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .badge.red   { border-color: rgba(220,20,60,0.4); color: #e06070; }
+    .badge.green { border-color: rgba(34,197,94,0.4); color: #4ade80; }
+    .badge.blue  { border-color: rgba(59,130,246,0.4); color: #60a5fa; }
+
+    /* ── SECTIONS ────────────────────────────────────────────────── */
+    section {
+      position: relative; z-index: 1;
+      padding: 90px 2rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .section-full {
+      max-width: 100%;
+      background: var(--dark);
+      padding: 90px 2rem;
+    }
+    .section-full .section-inner {
+      max-width: 1100px; margin: 0 auto;
+    }
+
+    .section-tag {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 3px; color: var(--red);
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    .section-desc {
+      font-size: 1rem; color: #888;
+      max-width: 620px;
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    /* ── STATS BAR ───────────────────────────────────────────────── */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 5rem;
+    }
+    .stat-item {
+      background: var(--dark2);
+      padding: 1.6rem 1.5rem;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2rem; font-weight: 900;
+      color: var(--white); display: block;
+      letter-spacing: -1px;
+    }
+    .stat-number.red { color: var(--red); }
+    .stat-label {
+      font-size: 0.72rem; color: var(--muted);
+      letter-spacing: 1.5px; text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* ── FEATURE GRID ────────────────────────────────────────────── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      position: relative; overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), transparent);
+      opacity: 0; transition: opacity .3s;
+    }
+    .feature-card:hover {
+      border-color: var(--muted);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+    }
+    .feature-card:hover::before { opacity: 1; }
+
+    .feature-icon {
+      font-size: 2rem; margin-bottom: 1rem; display: block;
+    }
+    .feature-title {
+      font-size: 1rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.6rem;
+    }
+    .feature-text {
+      font-size: 0.87rem; color: #777;
+      line-height: 1.65;
+    }
+
+    /* ── ARCHITECTURE DIAGRAM ────────────────────────────────────── */
+    .arch-diagram {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: #888;
+      overflow-x: auto;
+      position: relative;
+    }
+    .arch-diagram::before {
+      content: 'AILS ARCHITECTURE';
+      position: absolute; top: 12px; right: 16px;
+      font-size: 0.65rem; letter-spacing: 2px;
+      color: var(--red); font-weight: 600;
+    }
+    .arch-diagram .layer-title { color: var(--white); font-weight: 600; }
+    .arch-diagram .layer-red   { color: #e06070; }
+    .arch-diagram .layer-blue  { color: #60a5fa; }
+    .arch-diagram .layer-green { color: #4ade80; }
+    .arch-diagram .layer-gray  { color: #777; }
+
+    /* ── CODE BLOCK ──────────────────────────────────────────────── */
+    .code-container {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+    .code-header {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: var(--dark3);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-dots { display: flex; gap: 6px; }
+    .code-dots span {
+      width: 11px; height: 11px; border-radius: 50%;
+    }
+    .dot-red    { background: #ff5f57; }
+    .dot-yellow { background: #febc2e; }
+    .dot-green  { background: #28c840; }
+    .code-filename {
+      font-family: var(--mono); font-size: 0.75rem;
+      color: var(--muted); letter-spacing: 0.5px;
+    }
+    .code-copy-btn {
+      font-size: 0.72rem; color: var(--muted);
+      cursor: pointer; background: none;
+      border: 1px solid var(--border);
+      padding: 3px 10px; border-radius: 4px;
+      font-family: var(--font); transition: all .2s;
+    }
+    .code-copy-btn:hover { color: var(--white); border-color: var(--muted); }
+    pre {
+      padding: 1.5rem;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #ccc;
+    }
+    .kw  { color: #c792ea; }
+    .fn  { color: #82aaff; }
+    .str { color: #c3e88d; }
+    .cm  { color: #546e7a; font-style: italic; }
+    .num { color: #f78c6c; }
+    .cls { color: #ffcb6b; }
+
+    /* ── MODULE TABS ─────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex; gap: 0.4rem;
+      flex-wrap: wrap; margin-bottom: 1.5rem;
+    }
+    .tab-btn {
+      padding: 7px 16px;
+      border-radius: 5px;
+      font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; transition: all .2s;
+      background: var(--dark2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-family: var(--font);
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--red);
+      color: var(--white);
+      border-color: var(--red);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── INDUSTRY CARDS ──────────────────────────────────────────── */
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+    .industry-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      text-align: center;
+      transition: all .25s;
+      cursor: default;
+    }
+    .industry-card:hover {
+      border-color: var(--red);
+      box-shadow: 0 0 20px var(--red-dim);
+      transform: translateY(-3px);
+    }
+    .industry-emoji { font-size: 2.4rem; margin-bottom: 0.7rem; display: block; }
+    .industry-name {
+      font-size: 0.95rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.5rem;
+    }
+    .industry-desc { font-size: 0.8rem; color: #666; line-height: 1.55; }
+
+    /* ── ETHICS SECTION ──────────────────────────────────────────── */
+    .ethics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .ethics-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+    }
+    .ethics-card-title {
+      font-size: 0.9rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.5rem;
+    }
+    .ethics-card-text { font-size: 0.82rem; color: #777; line-height: 1.6; }
+
+    /* ── STRUCTURE TREE ──────────────────────────────────────────── */
+    .file-tree {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem 2rem;
+      font-family: var(--mono); font-size: 0.8rem;
+      color: #777; line-height: 1.9;
+      overflow-x: auto;
+    }
+    .file-tree .dir  { color: #60a5fa; font-weight: 600; }
+    .file-tree .file { color: #888; }
+    .file-tree .py   { color: #c3e88d; }
+    .file-tree .md   { color: #ffcb6b; }
+    .file-tree .yml  { color: #82aaff; }
+    .file-tree .txt  { color: #aaa; }
+
+    /* ── CHERRY COMPUTER SECTION ─────────────────────────────────── */
+    .cherry-card {
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    @media (max-width: 700px) {
+      .cherry-card { grid-template-columns: 1fr; }
+    }
+    .cherry-logo-ring {
+      width: 100px; height: 100px; border-radius: 50%;
+      border: 2px solid var(--red);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 0 30px var(--red-dim);
+    }
+    .cherry-logo-ring span {
+      font-size: 1.6rem; font-weight: 900;
+      letter-spacing: 2px; color: var(--white);
+    }
+    .cherry-name {
+      font-size: 1.5rem; font-weight: 800;
+      color: var(--white); margin-bottom: 0.3rem;
+    }
+    .cherry-tagline {
+      font-size: 0.82rem; color: var(--red);
+      letter-spacing: 1.5px; text-transform: uppercase;
+      font-weight: 600; margin-bottom: 1rem;
+    }
+    .cherry-desc { font-size: 0.9rem; color: #777; line-height: 1.7; }
+    .cherry-links { display: flex; gap: 0.8rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .cherry-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 0.8rem; font-weight: 600; color: var(--muted);
+      transition: all .2s;
+    }
+    .cherry-link:hover {
+      border-color: var(--red); color: var(--white);
+      box-shadow: 0 0 10px var(--red-dim);
+    }
+
+    /* ── QUICK START ──────────────────────────────────────────────── */
+    .steps-list {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .step {
+      display: flex; align-items: flex-start; gap: 1.2rem;
+      background: var(--dark2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+    }
+    .step-num {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 800; color: var(--white);
+      flex-shrink: 0;
+    }
+    .step-content {}
+    .step-title { font-size: 0.95rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .step-code  {
+      font-family: var(--mono); font-size: 0.78rem;
+      color: #4ade80; background: var(--code-bg);
+      padding: 4px 10px; border-radius: 4px;
+      display: inline-block; margin-top: 4px;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────────────── */
+    footer {
+      position: relative; z-index: 1;
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .footer-logo {
+      font-size: 2rem; font-weight: 900;
+      letter-spacing: 4px; color: var(--white);
+      margin-bottom: 0.3rem;
+    }
+    .footer-sub {
+      font-size: 0.8rem; color: var(--muted);
+      letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+    .footer-links {
+      display: flex; gap: 1.5rem;
+      justify-content: center; flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+    .footer-links a { font-size: 0.82rem; color: var(--muted); }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: 0.75rem; color: #444; }
+    .footer-copy strong { color: var(--red); }
+
+    /* ── DIVIDER ─────────────────────────────────────────────────── */
+    .divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero h1   { font-size: 2.8rem; }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Particle canvas -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- ── NAVIGATION ─────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-brand">
+    <div class="nav-logo-ring"><span>AILS</span></div>
+    <span class="nav-title">AILS</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#code">Code</a></li>
+    <li><a href="#ethics">Ethics</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-" class="nav-cta" target="_blank">GitHub ↗</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ───────────────────────────────────────────────────────────────── -->
+<section class="hero" id="home">
+
+  <div class="hero-logo">
+    <div class="hero-logo-ring"></div>
+    <div class="hero-logo-inner">
+      <div class="hero-logo-fallback">AILS</div>
+    </div>
+  </div>
+
+  <div class="hero-badge">
+    <span class="dot"></span>
+    OPEN SOURCE &nbsp;•&nbsp; ETHICS-FIRST &nbsp;•&nbsp; v1.0.0
+  </div>
+
+  <h1>
+    <span class="ails-letters">AILS</span>
+  </h1>
+  <p class="hero-subtitle">Artificial Intelligence Learning System</p>
+
+  <p class="hero-desc">
+    A comprehensive open-source framework for <strong>autonomous AI learning</strong> —
+    from data acquisition and NLP to deep learning, computer vision,
+    reinforcement learning, and responsible AI deployment.
+    <br/><br/>
+    <strong>Created by Cherry Computer Ltd.</strong>
+  </p>
+
+  <div class="hero-cta-group">
+    <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-"
+       class="btn-primary" target="_blank">
+      ⭐ Star on GitHub
+    </a>
+    <a href="#code" class="btn-outline">
+      &lt;/&gt; View Code
+    </a>
+    <a href="#quickstart" class="btn-outline">
+      🚀 Quick Start
+    </a>
+  </div>
+
+  <div class="hero-badges">
+    <span class="badge green">Python 3.9+</span>
+    <span class="badge blue">TensorFlow 2.x</span>
+    <span class="badge red">Ethics-First</span>
+    <span class="badge">MIT License</span>
+    <span class="badge">NLP</span>
+    <span class="badge">Computer Vision</span>
+    <span class="badge blue">Deep Learning</span>
+    <span class="badge">RL Agent</span>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── STATS BAR ──────────────────────────────────────────────────────────── -->
+<div style="position:relative;z-index:1;background:var(--dark);padding:0 2rem;">
+  <div style="max-width:1100px;margin:0 auto;padding:3rem 0;">
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-number">10+</span>
+        <span class="stat-label">Core Modules</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number red">226</span>
+        <span class="stat-label">Pages of Documentation</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">5</span>
+        <span class="stat-label">AI Paradigms</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number red">100%</span>
+        <span class="stat-label">Open Source</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">6+</span>
+        <span class="stat-label">Industry Applications</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number red">MIT</span>
+        <span class="stat-label">License</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── FEATURES ───────────────────────────────────────────────────────────── -->
+<section id="features">
+  <div class="section-tag">Core Capabilities</div>
+  <h2 class="section-title">Everything you need to build<br/>autonomous AI systems</h2>
+  <p class="section-desc">
+    AILS provides a complete, modular toolkit — from web-scale data collection
+    through model deployment, all designed with responsibility and ethics at the core.
+  </p>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="feature-icon">🕸️</span>
+      <div class="feature-title">Autonomous Data Acquisition</div>
+      <div class="feature-text">Web scraping with BeautifulSoup and Selenium for both static and JavaScript-rendered pages. MySQL and MongoDB integration for persistent storage. Full ETL pipeline support.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧠</span>
+      <div class="feature-title">Natural Language Processing</div>
+      <div class="feature-text">Tokenization, stemming, TF-IDF vectorization, N-gram generation, sentiment analysis, and named entity recognition. Supports rule-based and ML-based approaches.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">👁️</span>
+      <div class="feature-title">Computer Vision</div>
+      <div class="feature-text">CNN-based image classification with 3 convolutional blocks, batch normalization, and data augmentation. Includes image preprocessing, resizing, and normalization utilities.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🤖</span>
+      <div class="feature-title">Deep Learning</div>
+      <div class="feature-text">TensorFlow Sequential and Functional models. Bidirectional LSTM, GRU, and RNN for sequential data. Early stopping, LR scheduling, and dropout regularization built-in.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎮</span>
+      <div class="feature-title">Reinforcement Learning</div>
+      <div class="feature-text">Deep Q-Network (DQN) agent with experience replay memory, epsilon-greedy exploration, and target network stabilization. Ready for trading, gaming, and robotics environments.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🧩</span>
+      <div class="feature-title">Ensemble Methods</div>
+      <div class="feature-text">Hard/soft voting, prediction averaging, stacking with meta-learner, and bagging with bootstrap sampling. Increases model robustness across all task types.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">⚖️</span>
+      <div class="feature-title">Ethics & Bias Detection</div>
+      <div class="feature-text">Demographic parity, equalized odds, disparate impact (80% rule), and representation analysis. Automatically generates full fairness audit reports for every model.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <div class="feature-title">Privacy Preservation</div>
+      <div class="feature-text">Differential privacy (Laplace & Gaussian), k-anonymity, pseudonymization, anonymization, and data minimization. GDPR and CCPA compliant by design.</div>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">☁️</span>
+      <div class="feature-title">Production Deployment</div>
+      <div class="feature-text">FastAPI REST service with sentiment and fairness endpoints. Docker + Docker Compose support. GitHub Actions CI/CD for automated testing and deployment.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── ARCHITECTURE ────────────────────────────────────────────────────────── -->
+<div class="section-full" id="architecture">
+  <div class="section-inner">
+    <div class="section-tag">System Design</div>
+    <h2 class="section-title">AILS Architecture</h2>
+    <p class="section-desc">A fully layered architecture designed for modularity, scalability, and ethics-first AI development.</p>
+
+    <div class="arch-diagram">
+<pre>
+┌─────────────────────────────────────────────────────────────────────────────┐
+│            AILS — <span class="layer-title">Artificial Intelligence Learning System</span>               │
+│                    <span class="layer-red">Created by Cherry Computer Ltd.</span>                        │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│   <span class="layer-blue">┌───────────────┐</span>    <span class="layer-blue">┌─────────────────┐</span>    <span class="layer-blue">┌───────────────────────┐</span>   │
+│   <span class="layer-blue">│  DATA LAYER   │</span>    <span class="layer-blue">│ PROCESSING LAYER│</span>    <span class="layer-blue">│   LEARNING ENGINE     │</span>   │
+│   <span class="layer-blue">├───────────────┤</span>    <span class="layer-blue">├─────────────────┤</span>    <span class="layer-blue">├───────────────────────┤</span>   │
+│   <span class="layer-blue">│ Web Scraper   │</span>───▶<span class="layer-blue">│  NLP Module     │</span>───▶<span class="layer-blue">│ TensorFlow (DNN/LSTM) │</span>   │
+│   <span class="layer-blue">│ API Clients   │</span>    <span class="layer-blue">│  CV Module      │</span>    <span class="layer-blue">│ Reinforcement (DQN)   │</span>   │
+│   <span class="layer-blue">│ MySQL / DB    │</span>    <span class="layer-blue">│  Preprocessor   │</span>    <span class="layer-blue">│ Ensemble Methods      │</span>   │
+│   <span class="layer-blue">│ MongoDB Store │</span>    <span class="layer-blue">│  Tokenizer/NER  │</span>    <span class="layer-blue">│ Transfer Learning     │</span>   │
+│   <span class="layer-blue">└───────────────┘</span>    <span class="layer-blue">└─────────────────┘</span>    <span class="layer-blue">└───────────────────────┘</span>   │
+│          │                     │                          │                 │
+│          ▼                     ▼                          ▼                 │
+│   <span class="layer-red">┌───────────────────────────────────────────────────────────────────┐</span>   │
+│   <span class="layer-red">│                   ETHICS &amp; SAFETY LAYER                          │</span>   │
+│   <span class="layer-red">│   Bias Detection │ Fairness Metrics │ XAI │ Differential Privacy  │</span>   │
+│   <span class="layer-red">└───────────────────────────────────────────────────────────────────┘</span>   │
+│                                   │                                         │
+│                                   ▼                                         │
+│   <span class="layer-green">┌───────────────────────────────────────────────────────────────────┐</span>   │
+│   <span class="layer-green">│            DEPLOYMENT &amp; MONITORING LAYER                         │</span>   │
+│   <span class="layer-green">│    FastAPI REST │ Docker / K8s │ CI/CD │ Auto-Scaling │ Logging   │</span>   │
+│   <span class="layer-green">└───────────────────────────────────────────────────────────────────┘</span>   │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+</pre>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── CODE EXAMPLES ──────────────────────────────────────────────────────── -->
+<section id="code">
+  <div class="section-tag">Python Examples</div>
+  <h2 class="section-title">Production-ready code</h2>
+  <p class="section-desc">
+    Clean, well-documented Python modules you can use directly in your projects.
+  </p>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab(this,'tab-scraper')">🕸️ Scraper</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-nn')">🤖 Neural Net</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-ethics')">⚖️ Ethics</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-pipeline')">🔄 Pipeline</button>
+    <button class="tab-btn" onclick="switchTab(this,'tab-privacy')">🔒 Privacy</button>
+  </div>
+
+  <!-- Scraper Tab -->
+  <div class="tab-panel active" id="tab-scraper">
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">src/data/scraper.py</span>
+        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="kw">import</span> requests
+<span class="kw">from</span> bs4 <span class="kw">import</span> BeautifulSoup
+<span class="kw">from</span> typing <span class="kw">import</span> List, Dict, Optional
+
+<span class="cm"># AILS — Artificial Intelligence Learning System</span>
+<span class="cm"># Created by Cherry Computer Ltd.</span>
+
+<span class="kw">class</span> <span class="cls">AILSScraper</span>:
+    <span class="str">"""AILS Web Scraper for autonomous data acquisition."""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, timeout: int = <span class="num">30</span>):
+        self.headers = {<span class="str">"User-Agent"</span>: <span class="str">"Mozilla/5.0"</span>}
+        self.timeout = timeout
+
+    <span class="kw">def</span> <span class="fn">scrape</span>(self, url: str, tag: str = <span class="str">"p"</span>,
+               class_: Optional[str] = <span class="kw">None</span>) -> List[str]:
+        response = requests.<span class="fn">get</span>(url, headers=self.headers)
+        soup = <span class="cls">BeautifulSoup</span>(response.content, <span class="str">"html.parser"</span>)
+        elements = soup.<span class="fn">find_all</span>(tag, class_=class_)
+        <span class="kw">return</span> [el.<span class="fn">get_text</span>(strip=<span class="kw">True</span>) <span class="kw">for</span> el <span class="kw">in</span> elements]
+
+    <span class="kw">def</span> <span class="fn">scrape_table</span>(self, url: str) -> List[Dict]:
+        response = requests.<span class="fn">get</span>(url, headers=self.headers)
+        soup = <span class="cls">BeautifulSoup</span>(response.content, <span class="str">"html.parser"</span>)
+        table = soup.<span class="fn">find</span>(<span class="str">"table"</span>)
+        headers = [th.<span class="fn">get_text</span>() <span class="kw">for</span> th <span class="kw">in</span> table.<span class="fn">find_all</span>(<span class="str">"th"</span>)]
+        rows = []
+        <span class="kw">for</span> tr <span class="kw">in</span> table.<span class="fn">find_all</span>(<span class="str">"tr"</span>)[<span class="num">1</span>:]:
+            cells = [td.<span class="fn">get_text</span>() <span class="kw">for</span> td <span class="kw">in</span> tr.<span class="fn">find_all</span>(<span class="str">"td"</span>)]
+            <span class="kw">if</span> cells:
+                rows.<span class="fn">append</span>(<span class="fn">dict</span>(<span class="fn">zip</span>(headers, cells)))
+        <span class="kw">return</span> rows</pre>
+    </div>
+  </div>
+
+  <!-- Neural Net Tab -->
+  <div class="tab-panel" id="tab-nn">
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">src/models/neural_network.py</span>
+        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="kw">import</span> tensorflow <span class="kw">as</span> tf
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># AILS — Artificial Intelligence Learning System</span>
+<span class="cm"># Created by Cherry Computer Ltd.</span>
+
+<span class="kw">class</span> <span class="cls">AILSNeuralNetwork</span>:
+    <span class="str">"""TensorFlow Sequential model for AILS classification tasks."""</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, input_dim: int, hidden_units: list,
+                 output_dim: int = <span class="num">1</span>):
+        self.model = tf.keras.<span class="cls">Sequential</span>([
+            tf.keras.layers.<span class="cls">Dense</span>(<span class="num">128</span>, activation=<span class="str">"relu"</span>,
+                input_shape=(input_dim,)),
+            tf.keras.layers.<span class="cls">Dropout</span>(<span class="num">0.3</span>),
+            tf.keras.layers.<span class="cls">Dense</span>(<span class="num">64</span>, activation=<span class="str">"relu"</span>),
+            tf.keras.layers.<span class="cls">Dropout</span>(<span class="num">0.3</span>),
+            tf.keras.layers.<span class="cls">Dense</span>(output_dim, activation=<span class="str">"sigmoid"</span>)
+        ])
+
+    <span class="kw">def</span> <span class="fn">compile_model</span>(self):
+        self.model.<span class="fn">compile</span>(
+            optimizer=<span class="str">"adam"</span>,
+            loss=<span class="str">"binary_crossentropy"</span>,
+            metrics=[<span class="str">"accuracy"</span>]
+        )
+
+    <span class="kw">def</span> <span class="fn">train</span>(self, X, y, epochs=<span class="num">50</span>):
+        callbacks = [
+            tf.keras.callbacks.<span class="cls">EarlyStopping</span>(patience=<span class="num">5</span>,
+                restore_best_weights=<span class="kw">True</span>)
+        ]
+        <span class="kw">return</span> self.model.<span class="fn">fit</span>(X, y, epochs=epochs,
+            validation_split=<span class="num">0.2</span>, callbacks=callbacks)</pre>
+    </div>
+  </div>
+
+  <!-- Ethics Tab -->
+  <div class="tab-panel" id="tab-ethics">
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">src/ethics/bias_detector.py</span>
+        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># AILS — Artificial Intelligence Learning System</span>
+<span class="cm"># Created by Cherry Computer Ltd.</span>
+
+<span class="kw">class</span> <span class="cls">AILSBiasDetector</span>:
+    <span class="str">"""AILS Fairness Auditing — bias detection for responsible AI."""</span>
+
+    <span class="kw">def</span> <span class="fn">disparate_impact</span>(self, y_pred, sensitive_attr,
+                          privileged=<span class="num">1</span>) -> float:
+        <span class="str">"""
+        80% Rule: unprivileged / privileged rate >= 0.8
+        Ratio < 0.8 indicates discriminatory outcomes.
+        """</span>
+        priv = np.<span class="fn">mean</span>(y_pred[sensitive_attr == privileged])
+        unpriv = np.<span class="fn">mean</span>(y_pred[sensitive_attr != privileged])
+        ratio = unpriv / priv <span class="kw">if</span> priv > <span class="num">0</span> <span class="kw">else</span> <span class="num">0</span>
+        verdict = <span class="str">"✅ FAIR"</span> <span class="kw">if</span> ratio >= <span class="num">0.8</span> <span class="kw">else</span> <span class="str">"⚠️ BIASED"</span>
+        <span class="fn">print</span>(<span class="fn">f"Disparate Impact: {ratio:.4f} — {verdict}"</span>)
+        <span class="kw">return</span> ratio
+
+    <span class="kw">def</span> <span class="fn">generate_fairness_report</span>(self, y_true, y_pred,
+                                   sensitive_attr) -> dict:
+        <span class="str">"""Full fairness audit: parity + odds + disparate impact."""</span>
+        <span class="kw">return</span> {
+            <span class="str">"demographic_parity"</span>: self.<span class="fn">demographic_parity</span>(
+                y_pred, sensitive_attr),
+            <span class="str">"equalized_odds"</span>: self.<span class="fn">equalized_odds</span>(
+                y_true, y_pred, sensitive_attr),
+            <span class="str">"disparate_impact"</span>: self.<span class="fn">disparate_impact</span>(
+                y_pred, sensitive_attr),
+        }</pre>
+    </div>
+  </div>
+
+  <!-- Pipeline Tab -->
+  <div class="tab-panel" id="tab-pipeline">
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">examples/sentiment_analysis_pipeline.py</span>
+        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="cm"># AILS Full Sentiment Analysis Pipeline</span>
+<span class="cm"># Scrape → Store → Preprocess → Train → Evaluate</span>
+<span class="cm"># Created by Cherry Computer Ltd.</span>
+
+<span class="kw">from</span> src.data.scraper <span class="kw">import</span> <span class="cls">AILSScraper</span>
+<span class="kw">from</span> src.data.preprocessor <span class="kw">import</span> <span class="cls">AILSPreprocessor</span>
+<span class="kw">from</span> src.nlp.sentiment <span class="kw">import</span> <span class="cls">SentimentAnalyzer</span>
+<span class="kw">from</span> src.models.neural_network <span class="kw">import</span> <span class="cls">AILSNeuralNetwork</span>
+<span class="kw">from</span> src.ethics.bias_detector <span class="kw">import</span> <span class="cls">AILSBiasDetector</span>
+
+<span class="cm"># 1. Scrape product reviews</span>
+scraper = <span class="cls">AILSScraper</span>()
+reviews = scraper.<span class="fn">scrape</span>(<span class="str">"https://example.com/reviews"</span>, tag=<span class="str">"p"</span>)
+
+<span class="cm"># 2. Preprocess text</span>
+prep = <span class="cls">AILSPreprocessor</span>()
+clean = prep.<span class="fn">clean_text_batch</span>(reviews)
+
+<span class="cm"># 3. Rule-based sentiment</span>
+analyzer = <span class="cls">SentimentAnalyzer</span>()
+sentiments = analyzer.<span class="fn">analyze</span>(clean)
+
+<span class="cm"># 4. TF-IDF + Neural Network</span>
+X = analyzer.<span class="fn">fit_transform</span>(clean)
+nn = <span class="cls">AILSNeuralNetwork</span>(input_dim=X.shape[<span class="num">1</span>],
+                        hidden_units=[<span class="num">256</span>, <span class="num">128</span>])
+nn.<span class="fn">compile_model</span>()
+nn.<span class="fn">train</span>(X_train, y_train, epochs=<span class="num">20</span>)
+
+<span class="cm"># 5. Fairness audit</span>
+detector = <span class="cls">AILSBiasDetector</span>()
+report = detector.<span class="fn">generate_fairness_report</span>(
+    y_true, y_pred, sensitive_attr)
+<span class="fn">print</span>(report[<span class="str">"overall_verdict"</span>])</pre>
+    </div>
+  </div>
+
+  <!-- Privacy Tab -->
+  <div class="tab-panel" id="tab-privacy">
+    <div class="code-container">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot-red"></span><span class="dot-yellow"></span><span class="dot-green"></span></div>
+        <span class="code-filename">src/ethics/privacy.py</span>
+        <button class="code-copy-btn" onclick="copyCode(this)">Copy</button>
+      </div>
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># AILS — Artificial Intelligence Learning System</span>
+<span class="cm"># Created by Cherry Computer Ltd.</span>
+
+<span class="kw">class</span> <span class="cls">PrivacyPreserver</span>:
+    <span class="str">"""AILS Privacy module — GDPR/CCPA compliant by design."""</span>
+
+    <span class="kw">@staticmethod</span>
+    <span class="kw">def</span> <span class="fn">add_differential_privacy</span>(data, epsilon=<span class="num">1.0</span>,
+                                    sensitivity=<span class="num">1.0</span>):
+        <span class="str">"""
+        Laplace Mechanism differential privacy.
+        Lower epsilon = stronger privacy guarantee.
+        """</span>
+        scale = sensitivity / epsilon
+        noise = np.random.<span class="fn">laplace</span>(<span class="num">0</span>, scale, data.shape)
+        <span class="kw">return</span> data + noise
+
+    <span class="kw">@staticmethod</span>
+    <span class="kw">def</span> <span class="fn">data_minimization</span>(record: dict, essential: list):
+        <span class="str">"""Keep only strictly necessary data fields (GDPR Art. 5)."""</span>
+        <span class="kw">return</span> {k: v <span class="kw">for</span> k, v <span class="kw">in</span> record.<span class="fn">items</span>() <span class="kw">if</span> k <span class="kw">in</span> essential}
+
+    <span class="kw">@staticmethod</span>
+    <span class="kw">def</span> <span class="fn">anonymize</span>(identifiers: list) -> list:
+        <span class="str">"""Irreversible one-way hashing of PII identifiers."""</span>
+        <span class="kw">import</span> hashlib
+        <span class="kw">return</span> [<span class="str">f"ANON_{hashlib.md5(i.encode()).hexdigest()[:8].upper()}"</span>
+                <span class="kw">for</span> i <span class="kw">in</span> identifiers]</pre>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── INDUSTRY APPLICATIONS ──────────────────────────────────────────────── -->
+<div class="section-full" id="industries">
+  <div class="section-inner">
+    <div class="section-tag">Applications</div>
+    <h2 class="section-title">Built for every industry</h2>
+    <p class="section-desc">AILS powers intelligent, autonomous systems across the most impactful sectors.</p>
+
+    <div class="industry-grid">
+      <div class="industry-card">
+        <span class="industry-emoji">📚</span>
+        <div class="industry-name">Education</div>
+        <div class="industry-desc">Personalized learning paths, intelligent tutoring, automated content generation, and real-time knowledge gap identification.</div>
+      </div>
+      <div class="industry-card">
+        <span class="industry-emoji">🏥</span>
+        <div class="industry-name">Healthcare</div>
+        <div class="industry-desc">Medical image diagnosis, drug discovery, patient outcome prediction, and clinical trial data analysis using CNN and NLP.</div>
+      </div>
+      <div class="industry-card">
+        <span class="industry-emoji">💰</span>
+        <div class="industry-name">Finance</div>
+        <div class="industry-desc">Stock market trend prediction, fraud detection, algorithmic trading via RL agents, and risk assessment scoring.</div>
+      </div>
+      <div class="industry-card">
+        <span class="industry-emoji">🎨</span>
+        <div class="industry-name">Content Creation</div>
+        <div class="industry-desc">Automated article generation, personalized content recommendations, creative writing assistance, and multi-language localization.</div>
+      </div>
+      <div class="industry-card">
+        <span class="industry-emoji">🌐</span>
+        <div class="industry-name">Metaverse</div>
+        <div class="industry-desc">Intelligent NPCs, adaptive world generation, real-time NLP conversations, and AI-curated virtual commerce experiences.</div>
+      </div>
+      <div class="industry-card">
+        <span class="industry-emoji">🤝</span>
+        <div class="industry-name">Social Impact</div>
+        <div class="industry-desc">Bias-aware policy analysis, accessibility tools, public health monitoring, and disaster response coordination.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── ETHICS SECTION ──────────────────────────────────────────────────────── -->
+<section id="ethics">
+  <div class="section-tag">Responsible AI</div>
+  <h2 class="section-title">Ethics baked in,<br/>not bolted on</h2>
+  <p class="section-desc">Every AILS module is designed with responsible AI principles from the ground up — not as an afterthought.</p>
+
+  <div class="ethics-grid">
+    <div class="ethics-card">
+      <div class="ethics-card-title">🎯 Bias Detection & Mitigation</div>
+      <div class="ethics-card-text">Demographic parity, equalized odds, and disparate impact metrics (80% rule). Automatic fairness reports generated for every model evaluation. Re-weighting and adversarial debiasing support.</div>
+    </div>
+    <div class="ethics-card">
+      <div class="ethics-card-title">🔒 Differential Privacy</div>
+      <div class="ethics-card-text">Laplace and Gaussian noise mechanisms to protect individual data points while maintaining aggregate utility. Privacy budget tracking (epsilon management) built into the pipeline.</div>
+    </div>
+    <div class="ethics-card">
+      <div class="ethics-card-title">🔍 Explainable AI (XAI)</div>
+      <div class="ethics-card-text">Integration hooks for LIME and SHAP to make black-box models transparent and interpretable. Every decision can be explained and audited to meet regulatory requirements.</div>
+    </div>
+    <div class="ethics-card">
+      <div class="ethics-card-title">📋 GDPR & CCPA Compliance</div>
+      <div class="ethics-card-text">Data minimization, right to erasure, k-anonymity, pseudonymization, and consent management patterns. AILS keeps only what is strictly necessary for each AI task.</div>
+    </div>
+    <div class="ethics-card">
+      <div class="ethics-card-title">🌍 Federated Learning Ready</div>
+      <div class="ethics-card-text">Architecture supports federated training patterns where raw data never leaves the user's device. Only model weights are shared, keeping sensitive data localized and private.</div>
+    </div>
+    <div class="ethics-card">
+      <div class="ethics-card-title">♻️ Responsible Scraping</div>
+      <div class="ethics-card-text">Built-in rate limiting, robots.txt compliance hooks, and ethical data sourcing guidelines. AILS scraping modules are designed to minimize server impact and respect content ownership.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── QUICK START ─────────────────────────────────────────────────────────── -->
+<div class="section-full" id="quickstart">
+  <div class="section-inner">
+    <div class="section-tag">Get Started</div>
+    <h2 class="section-title">Up and running in minutes</h2>
+    <p class="section-desc">Clone, install, and run your first AILS model in under 5 minutes.</p>
+
+    <div class="steps-list" style="max-width:720px;">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Clone the Repository</div>
+          <code class="step-code">git clone https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-.git && cd Artificial-Intelligence-Learning-System-AILS-</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Create a Virtual Environment</div>
+          <code class="step-code">python -m venv ails-env && source ails-env/bin/activate</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">Install Dependencies</div>
+          <code class="step-code">pip install -r requirements.txt</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">Run the Demo Pipeline</div>
+          <code class="step-code">python examples/sentiment_analysis_pipeline.py</code>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">Or launch the REST API</div>
+          <code class="step-code">make run-api  # → http://localhost:8000/docs</code>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── REPOSITORY STRUCTURE ───────────────────────────────────────────────── -->
+<section id="structure">
+  <div class="section-tag">Repository</div>
+  <h2 class="section-title">Project Structure</h2>
+
+  <div class="file-tree">
+<pre><span class="dir">Artificial-Intelligence-Learning-System-AILS-/</span>
+├── <span class="md">README.md</span>             <span class="layer-gray"># Full documentation & code examples</span>
+├── <span class="md">CONTRIBUTING.md</span>       <span class="layer-gray"># Contribution guidelines</span>
+├── <span class="md">CODE_OF_CONDUCT.md</span>    <span class="layer-gray"># Community standards</span>
+├── <span class="md">SECURITY.md</span>           <span class="layer-gray"># Security policy</span>
+├── <span class="md">CHANGELOG.md</span>          <span class="layer-gray"># Version history</span>
+├── <span class="md">LICENSE</span>               <span class="layer-gray"># MIT License (Cherry Computer Ltd.)</span>
+├── <span class="txt">requirements.txt</span>      <span class="layer-gray"># Python dependencies</span>
+├── <span class="py">setup.py</span>              <span class="layer-gray"># Package setup</span>
+├── <span class="txt">Makefile</span>              <span class="layer-gray"># Dev commands (test, lint, run)</span>
+├── <span class="txt">Dockerfile</span>            <span class="layer-gray"># Docker container</span>
+├── <span class="yml">docker-compose.yml</span>    <span class="layer-gray"># MySQL + MongoDB + Redis + API</span>
+│
+├── <span class="dir">.github/</span>
+│   ├── <span class="yml">workflows/ci.yml</span>  <span class="layer-gray"># GitHub Actions CI</span>
+│   └── <span class="yml">workflows/cd.yml</span>  <span class="layer-gray"># GitHub Actions CD</span>
+│
+├── <span class="dir">src/</span>
+│   ├── <span class="dir">data/</span>             <span class="layer-gray"># Scraper, DB, Preprocessor</span>
+│   ├── <span class="dir">nlp/</span>              <span class="layer-gray"># Sentiment, Tokenizer, NER</span>
+│   ├── <span class="dir">models/</span>           <span class="layer-gray"># NN, LSTM, DQN, Ensemble, Trainer</span>
+│   ├── <span class="dir">vision/</span>           <span class="layer-gray"># CNN, Image Processor</span>
+│   ├── <span class="dir">ethics/</span>           <span class="layer-gray"># Bias Detector, Privacy</span>
+│   ├── <span class="dir">utils/</span>            <span class="layer-gray"># Metrics, Config, Logger</span>
+│   └── <span class="py">api.py</span>            <span class="layer-gray"># FastAPI REST Service</span>
+│
+├── <span class="dir">tests/</span>                <span class="layer-gray"># pytest unit tests</span>
+├── <span class="dir">examples/</span>             <span class="layer-gray"># Ready-to-run demo scripts</span>
+└── <span class="dir">notebooks/</span>            <span class="layer-gray"># Jupyter tutorials</span></pre>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CHERRY COMPUTER LTD ─────────────────────────────────────────────────── -->
+<div class="section-full" id="about">
+  <div class="section-inner">
+    <div class="section-tag">Creator</div>
+    <h2 class="section-title">Cherry Computer Ltd.</h2>
+
+    <div class="cherry-card">
+      <div>
+        <div class="cherry-logo-ring"><span>CCL</span></div>
+        <div class="cherry-name">Cherry Computer Ltd.</div>
+        <div class="cherry-tagline">Innovation with Integrity</div>
+        <div class="cherry-desc">
+          Cherry Computer Ltd. is the creator and primary maintainer of the AILS
+          repository. As a forward-thinking technology company, Cherry Computer Ltd.
+          is dedicated to building <strong style="color:var(--white)">responsible, scalable, and ethical AI solutions</strong>
+          that empower developers, researchers, and organizations worldwide.
+          <br/><br/>
+          AILS represents our commitment to democratizing access to
+          advanced AI technology — making autonomous learning systems
+          accessible to everyone, from individual researchers to enterprise teams.
+        </div>
+        <div class="cherry-links">
+          <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-" class="cherry-link" target="_blank">
+            🐙 GitHub
+          </a>
+          <a href="mailto:contact@cherrycomputer.ltd" class="cherry-link">
+            📧 Email
+          </a>
+          <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-/issues" class="cherry-link" target="_blank">
+            💬 Issues
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div style="background:var(--dark3);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;">
+          <div style="font-size:0.72rem;letter-spacing:2px;color:var(--red);font-weight:700;margin-bottom:1.2rem;text-transform:uppercase;">Our Mission</div>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.9rem;">
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.87rem;color:#888;">
+              <span style="color:var(--red);flex-shrink:0;margin-top:2px;">▶</span>
+              Democratize access to powerful, production-grade AI frameworks
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.87rem;color:#888;">
+              <span style="color:var(--red);flex-shrink:0;margin-top:2px;">▶</span>
+              Build AI that is transparent, auditable, and fair by design
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.87rem;color:#888;">
+              <span style="color:var(--red);flex-shrink:0;margin-top:2px;">▶</span>
+              Foster an inclusive, diverse AI development community
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.87rem;color:#888;">
+              <span style="color:var(--red);flex-shrink:0;margin-top:2px;">▶</span>
+              Advance research in autonomous learning and ethical AI
+            </li>
+            <li style="display:flex;gap:10px;align-items:flex-start;font-size:0.87rem;color:#888;">
+              <span style="color:var(--red);flex-shrink:0;margin-top:2px;">▶</span>
+              Ensure AI serves as a positive force for humanity
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── FOOTER ─────────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-logo">AILS</div>
+  <div class="footer-sub">Artificial Intelligence Learning System</div>
+
+  <div class="footer-links">
+    <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-" target="_blank">GitHub</a>
+    <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-/blob/main/README.md" target="_blank">Docs</a>
+    <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-/issues" target="_blank">Issues</a>
+    <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-/blob/main/CONTRIBUTING.md" target="_blank">Contributing</a>
+    <a href="https://github.com/CherryComputerLtd/Artificial-Intelligence-Learning-System-AILS-/blob/main/LICENSE" target="_blank">MIT License</a>
+    <a href="mailto:contact@cherrycomputer.ltd">Contact</a>
+  </div>
+
+  <div class="footer-copy">
+    © 2024 <strong>Cherry Computer Ltd.</strong> — All rights reserved.<br/>
+    Released under the MIT License. Built with ♥ for the AI community.
+  </div>
+</footer>
+
+<!-- ── SCRIPTS ─────────────────────────────────────────────────────────────── -->
+<script>
+  /* ── Particle animation ─────────────────────────────────────── */
+  (function () {
+    const canvas = document.getElementById('particles-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() { this.reset(); }
+      reset() {
+        this.x  = Math.random() * W;
+        this.y  = Math.random() * H;
+        this.r  = Math.random() * 1.5 + 0.3;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = (Math.random() - 0.5) * 0.3;
+        this.alpha = Math.random() * 0.5 + 0.1;
+      }
+      update() {
+        this.x += this.vx; this.y += this.vy;
+        if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(220,20,60,${this.alpha})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+    function connect() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const d  = Math.sqrt(dx*dx + dy*dy);
+          if (d < 100) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(220,20,60,${0.07 * (1 - d/100)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => { p.update(); p.draw(); });
+      connect();
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
+  /* ── Tab switcher ───────────────────────────────────────────── */
+  function switchTab(btn, panelId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(panelId).classList.add('active');
+  }
+
+  /* ── Code copy ──────────────────────────────────────────────── */
+  function copyCode(btn) {
+    const pre = btn.closest('.code-container').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    });
+  }
+
+  /* ── Counter animation ──────────────────────────────────────── */
+  function animateCount(el, target, suffix = '') {
+    let start = 0;
+    const step = target / 60;
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = Math.floor(start) + suffix;
+    }, 24);
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('.stat-number').forEach(el => {
+          const txt = el.textContent.trim();
+          const num = parseFloat(txt.replace(/[^0-9.]/g, ''));
+          const suffix = txt.replace(/[0-9.]/g, '');
+          if (!isNaN(num)) animateCount(el, num, suffix);
+        });
+        observer.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+
+  const statsBar = document.querySelector('.stats-bar');
+  if (statsBar) observer.observe(statsBar);
+
+  /* ── Smooth nav active state ────────────────────────────────── */
+  const sections = document.querySelectorAll('section[id], div[id]');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 80) cur = s.id;
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.style.color = a.getAttribute('href') === `#${cur}` ? '#fff' : '';
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+name = "ails-framework"
+version = "1.0.0"
+description = "Artificial Intelligence Learning System Framework"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+  {name = "Cherry Computer Ltd.", email = "contact@cherrycomputer.ltd"},
+]
+keywords = [
+  "artificial-intelligence",
+  "machine-learning",
+  "deep-learning",
+  "nlp",
+  "computer-vision",
+  "ethics",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/CherryComputerLtd/AILS"
+Repository = "https://github.com/CherryComputerLtd/AILS"
+Issues = "https://github.com/CherryComputerLtd/AILS/issues"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[tool.black]
+line-length = 88
+target-version = ["py39", "py310", "py311"]
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 88
+
+[tool.mypy]
+python_version = "3.9"
+ignore_missing_imports = true
+strict = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*", "examples/*", "docs/*"]
