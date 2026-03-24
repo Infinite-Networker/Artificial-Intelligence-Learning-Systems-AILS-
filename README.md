@@ -47,10 +47,9 @@ Welcome to the journey.
 
 **Created & Maintained by [Cherry Computer Ltd.](https://github.com/CherryComputerLtd)**
 
-<img src="https://github.com/Infinite-Networker/Artificial-Intelligence-Learning-System-AILS-/blob/3797d2142bddc95169892848c818c9af6aeaa18c/%20The%20Official%20Cherry%20Computer%20Ltd.%20Logo.png" alt="The Official Logo of Cherry Computer Ltd." width="350"/>
-</div>
-
 ---
+
+</div>
 
 ## 📋 Table of Contents
 
@@ -112,7 +111,7 @@ AILS systems embody **three foundational principles**:
 ## 🏢 About Cherry Computer Ltd.
 
 <div align="center">
-<img src="assets/cherry_computer_banner.png" alt="Cherry Computer Ltd." width="600"/>
+<img src="https://github.com/Infinite-Networker/Artificial-Intelligence-Learning-System-AILS-/blob/3797d2142bddc95169892848c818c9af6aeaa18c/%20The%20Official%20Cherry%20Computer%20Ltd.%20Logo.png" alt="The Official Logo of Cherry Computer Ltd." width="350"/>
 </div>
 
 **Cherry Computer Ltd.** is the creator and primary maintainer of the AILS repository. As a forward-thinking technology company, Cherry Computer Ltd. is dedicated to building responsible, scalable, and ethical AI solutions that empower developers, researchers, and organizations worldwide.
