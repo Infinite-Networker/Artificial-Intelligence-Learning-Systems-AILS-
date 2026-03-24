@@ -1483,7 +1483,7 @@ THE SOFTWARE.
 
 <div align="center">
 
-<img src="assets/ails_logo.png" alt="AILS" width="80"/>
+<img src="https://github.com/Infinite-Networker/Artificial-Intelligence-Learning-System-AILS-/blob/f9435ad732dc37817b5a223ccb4576babdccae4c/The%20Official%20Artificial%20Intelligence%20Learning%20System%20(AILS)%20Logo.png" alt="AILS" width="80"/>
 
 **AILS — Artificial Intelligence Learning System**
 
