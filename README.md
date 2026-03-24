@@ -46,7 +46,8 @@ Welcome to the journey.
 <br/>
 
 **Created & Maintained by [Cherry Computer Ltd.](https://github.com/CherryComputerLtd)**
-[![Cherry Computer Ltd.] (https://img.shields.io/badge/Made%20by-Cherry%20Computer%20Ltd.-e8003d?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PC9zdmc+&logoColor=white)](#-cherry-computer-ltd)
+
+[![Cherry Computer Ltd.](https://img.shields.io/badge/Made%20by-Cherry%20Computer%20Ltd.-e8003d?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PC9zdmc+&logoColor=white)](#-cherry-computer-ltd)
 
 ---
 
