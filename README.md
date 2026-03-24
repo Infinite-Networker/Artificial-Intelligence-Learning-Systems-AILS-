@@ -47,8 +47,7 @@ Welcome to the journey.
 
 **Created & Maintained by [Cherry Computer Ltd.](https://github.com/CherryComputerLtd)**
 
-[![Cherry Computer Ltd.](https://img.shields.io/badge/Cherry%20Computer%20Ltd.-Creator%20%26%20Maintainer-DC143C?style=for-the-badge&logo=github&logoColor=white)](https://github.com/CherryComputerLtd)
-
+[![Cherry Computer Ltd.] <img src="(https://github.com/Infinite-Networker/Artificial-Intelligence-Learning-System-AILS-/blob/3797d2142bddc95169892848c818c9af6aeaa18c/%20The%20Official%20Cherry%20Computer%20Ltd.%20Logo.png)" alt="The Official Logo of Cherry Computer Ltd." width="350"/>
 </div>
 
 ---
