@@ -47,7 +47,7 @@ Welcome to the journey.
 
 **Created & Maintained by [Cherry Computer Ltd.](https://github.com/CherryComputerLtd)**
 
-<img src="(https://github.com/Infinite-Networker/Artificial-Intelligence-Learning-System-AILS-/blob/3797d2142bddc95169892848c818c9af6aeaa18c/%20The%20Official%20Cherry%20Computer%20Ltd.%20Logo.png)" alt="The Official Logo of Cherry Computer Ltd." width="350"/>
+<img src="https://github.com/Infinite-Networker/Artificial-Intelligence-Learning-System-AILS-/blob/3797d2142bddc95169892848c818c9af6aeaa18c/%20The%20Official%20Cherry%20Computer%20Ltd.%20Logo.png" alt="The Official Logo of Cherry Computer Ltd." width="350"/>
 </div>
 
 ---
